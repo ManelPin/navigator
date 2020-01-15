@@ -19,6 +19,7 @@ type Props = {};
     progress: number,
     modalVisible: boolean,
     filename: string,
+    
   
     error: string | null
   };
@@ -168,23 +169,11 @@ class Mymodal extends Component<Props, State> {
       channels: 2,
       sampleRate: 44100,
       quality: 'max'
-    }).prepare((err,fsPath) => {
-      if (err) {
-        console.log('error at _reloadPlayer():');
-        console.log(err);
-      } else {
-        console.log(fsPath);
-        console.log(this.state.filename);
-        this.actualPath=fsPath;
-        this.player.looping = this.state.loopButtonStatus;
-        
-      }
-
-      this._updateState();
     });
 
     this._updateState();
   }
+
   _toggleRecord() {
     if (this.player) {
       this.player.destroy();
@@ -290,20 +279,16 @@ class Mymodal extends Component<Props, State> {
  
 
   render() {
-    
-    return (
-      <View style={styles.container}>
-        
-      transparent={false}
-      visible={this.state.modalVisible}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-      }}>
-      <View style={styles.modal}>
+    const {navigation} =this.props;
+    const person = navigation.getParam('id');
+    const files = navigation.getParam('files');
+    return(
+      <View >
+      <View >
         <View>
         <View style={styles.modalContainer}>
         <View style={styles.modalHeader}>
-    <Text style={styles.title}>Record message to {name}</Text>
+    <Text style={styles.title}>Play {person.first_name} {files.date}  {files.time} </Text>
       <View style={styles.divider}></View>
     </View>
     <View>
@@ -317,37 +302,15 @@ class Mymodal extends Component<Props, State> {
         </View>
         
         
-        <View>
-          <Text style={styles.title}>
-            Recording
-          </Text>
-        </View>
-        <View>
-          <Button title={this.state.recordButton} disabled={this.state.recordButtonDisabled} onPress={() => this._toggleRecord()} />
-        </View>
+        
+        
         <View>
           <Text style={styles.errorMessage}>{this.state.error}</Text>
         </View>
-    <View style={styles.modalBody}>
-    <Text style={styles.bodyText}>Send Message To {name} ?</Text>
-    </View>
+    
     <View style={styles.modalFooter}>
       <View style={styles.divider}></View>
-      <View style={{flexDirection:"row-reverse",margin:10}}>
-        <TouchableOpacity style={{...styles.actions,backgroundColor:"#db2828"}} 
-          onPress={() => {
-            this.setModalVisible(false);
-          }}>
-          <Text style={styles.actionText}>No</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{...styles.actions,backgroundColor:"#21ba45"}}
-          onPress={() => {
-            this.recorder.stop();
-            this.setModalVisible(false);
-          }}>
-          <Text style={styles.actionText}>Yes</Text>
-        </TouchableOpacity>
-      </View>
+      
     </View>
     </View>
         </View>
@@ -356,15 +319,11 @@ class Mymodal extends Component<Props, State> {
       
       
 
-      <TouchableOpacity
-        onPress={() => {
-          this.setModalVisible(!this.state.modalVisible);
-        }}>
-        <Text>Record Message to {name}</Text>
-      </TouchableOpacity>
+     
     </View>
-    );
-  }
+    
+    )
+        }
 }
 
 const styles = StyleSheet.create({
@@ -382,8 +341,8 @@ const styles = StyleSheet.create({
   },
   modalContainer:{
     backgroundColor:"#f9fafb",
-    width:"80%",
-    borderRadius:5
+    width:"100%",
+    borderRadius:0
   },
   modalHeader:{
     
@@ -402,7 +361,7 @@ const styles = StyleSheet.create({
   modalBody:{
     backgroundColor:"#fff",
     paddingVertical:20,
-    paddingHorizontal:10
+    
   },
   modalFooter:{
   },

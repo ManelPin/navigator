@@ -40,22 +40,22 @@ class DetailsScreen extends React.Component {
 
   render() {
     const {navigation} =this.props;
-    const person = navigation.getParam('id')
-    const modal= Mymodal;
+    const person = navigation.getParam('id');
+    
     return (
       <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           centerContent="true"
-          contentContainerStyle={styles.container}
+          contentContainerStyle={styles.ScrollContainer}
           >
-      <View style={styles.container}>
+      <View >
         
         
         <View style={styles.actions} >
           {person.files.map((files)=>(
-          <Button key={files.date}
+          <Button key={files.date+files.time}
           title={files.date+" "+files.time}
-          onPress={() => this.props.navigation.navigate('Play',{id: person})}
+          onPress={() => this.props.navigation.navigate('Play',{id: person, files: files})}
         />
         ))}
         
@@ -117,8 +117,15 @@ const styles = StyleSheet.create({
   },
   modalContainer:{
     backgroundColor:"#f9fafb",
-    width:"80%",
+    width:"90%",
     borderRadius:5
+  },
+  ScrollContainer:{
+    backgroundColor:"#f9fafb",
+    width:"90%",
+    borderRadius:5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modalHeader:{
     
